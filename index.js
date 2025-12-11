@@ -1,7 +1,7 @@
 // Import required modules
 const express = require('express');
 const session = require('express-session');
-const mysql = require('mysql');
+const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const expressSanitizer = require('express-sanitizer');
 require('dotenv').config();
