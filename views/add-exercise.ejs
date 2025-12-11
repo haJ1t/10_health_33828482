@@ -1,0 +1,138 @@
+<%- include('partials/header') %>
+<%- include('partials/nav') %>
+
+<main class="main-content">
+    <section class="form-section">
+        <div class="page-header">
+            <h1><i class="fas fa-plus-circle"></i> Add Exercise</h1>
+            <p>Log your workout session</p>
+        </div>
+        
+        <% if (errors && errors.length > 0) { %>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <ul class="error-list">
+                    <% errors.forEach(error => { %>
+                        <li><%= error.msg %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        <% } %>
+        
+        <div class="form-container">
+            <form action="<%= basePath %>/exercises/add" method="POST" class="data-form">
+                <div class="form-group">
+                    <label for="exercise_name">
+                        <i class="fas fa-dumbbell"></i> Exercise Name *
+                    </label>
+                    <input 
+                        type="text" 
+                        id="exercise_name" 
+                        name="exercise_name" 
+                        class="form-control" 
+                        placeholder="e.g., Morning Run, Bench Press, Yoga"
+                        value="<%= formData.exercise_name || '' %>"
+                        required
+                        autofocus
+                    >
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="exercise_type">
+                            <i class="fas fa-list"></i> Exercise Type *
+                        </label>
+                        <select 
+                            id="exercise_type" 
+                            name="exercise_type" 
+                            class="form-control"
+                            required
+                        >
+                            <option value="">Select type...</option>
+                            <option value="cardio" <%= formData.exercise_type === 'cardio' ? 'selected' : '' %>>Cardio</option>
+                            <option value="strength" <%= formData.exercise_type === 'strength' ? 'selected' : '' %>>Strength</option>
+                            <option value="flexibility" <%= formData.exercise_type === 'flexibility' ? 'selected' : '' %>>Flexibility</option>
+                            <option value="sports" <%= formData.exercise_type === 'sports' ? 'selected' : '' %>>Sports</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="date">
+                            <i class="fas fa-calendar"></i> Date *
+                        </label>
+                        <input 
+                            type="date" 
+                            id="date" 
+                            name="date" 
+                            class="form-control"
+                            value="<%= formData.date || new Date().toISOString().split('T')[0] %>"
+                            max="<%= new Date().toISOString().split('T')[0] %>"
+                            required
+                        >
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="duration_minutes">
+                            <i class="fas fa-clock"></i> Duration (minutes) *
+                        </label>
+                        <input 
+                            type="number" 
+                            id="duration_minutes" 
+                            name="duration_minutes" 
+                            class="form-control"
+                            placeholder="30"
+                            value="<%= formData.duration_minutes || '' %>"
+                            min="1"
+                            max="1440"
+                            required
+                        >
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="calories_burned">
+                            <i class="fas fa-fire"></i> Calories Burned
+                        </label>
+                        <input 
+                            type="number" 
+                            id="calories_burned" 
+                            name="calories_burned" 
+                            class="form-control"
+                            placeholder="250"
+                            value="<%= formData.calories_burned || '' %>"
+                            min="0"
+                        >
+                        <small class="form-text">Optional</small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">
+                        <i class="fas fa-sticky-note"></i> Notes
+                    </label>
+                    <textarea 
+                        id="notes" 
+                        name="notes" 
+                        class="form-control"
+                        rows="4"
+                        placeholder="Add any additional notes about your workout..."
+                        maxlength="500"
+                    ><%= formData.notes || '' %></textarea>
+                    <small class="form-text">Optional (max 500 characters)</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Exercise
+                    </button>
+                    <a href="<%= basePath %>/exercises" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

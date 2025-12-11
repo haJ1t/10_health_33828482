@@ -1,0 +1,156 @@
+<%- include('partials/header') %>
+<%- include('partials/nav') %>
+
+<main class="main-content">
+    <% if (user) { %>
+        <!-- Logged-in user dashboard -->
+        <section class="dashboard">
+            <h1>Welcome back, <%= user.first_name || user.username %>! 👋</h1>
+            <p class="subtitle">Here's your fitness overview</p>
+            
+            <% if (stats) { %>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-dumbbell"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3><%= stats.total_exercises || 0 %></h3>
+                            <p>Total Exercises</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-utensils"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3><%= stats.total_meals || 0 %></h3>
+                            <p>Meals Logged</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-bullseye"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3><%= stats.active_goals || 0 %></h3>
+                            <p>Active Goals</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3><%= stats.weekly_calories || 0 %></h3>
+                            <p>Calories (7 days)</p>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <h2>Quick Actions</h2>
+                <div class="action-buttons">
+                    <a href="<%= basePath %>/exercises/add" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Exercise
+                    </a>
+                    <a href="<%= basePath %>/nutrition/add" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Meal
+                    </a>
+                    <a href="<%= basePath %>/goals/add" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Goal
+                    </a>
+                    <a href="<%= basePath %>/search" class="btn btn-secondary">
+                        <i class="fas fa-search"></i> Search
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Recent Activities -->
+            <% if (activities && activities.length > 0) { %>
+                <div class="recent-activities">
+                    <h2>Recent Activities</h2>
+                    <div class="activity-list">
+                        <% activities.forEach(activity => { %>
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <% if (activity.type === 'exercise') { %>
+                                        <i class="fas fa-dumbbell"></i>
+                                    <% } else { %>
+                                        <i class="fas fa-utensils"></i>
+                                    <% } %>
+                                </div>
+                                <div class="activity-details">
+                                    <h4><%= activity.name %></h4>
+                                    <p>
+                                        <%= new Date(activity.date).toLocaleDateString() %> - 
+                                        <%= activity.value %> 
+                                        <% if (activity.type === 'exercise') { %>
+                                            calories burned
+                                        <% } else { %>
+                                            calories
+                                        <% } %>
+                                    </p>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            <% } %>
+        </section>
+    <% } else { %>
+        <!-- Guest user welcome page -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to FitLife Tracker 💪</h1>
+                <p class="hero-subtitle">Your personal health and fitness companion</p>
+                <p>Track your exercises, monitor nutrition, and achieve your fitness goals!</p>
+                
+                <div class="hero-buttons">
+                    <a href="<%= basePath %>/auth/register" class="btn btn-primary btn-large">
+                        <i class="fas fa-user-plus"></i> Get Started
+                    </a>
+                    <a href="<%= basePath %>/auth/login" class="btn btn-secondary btn-large">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </a>
+                </div>
+            </div>
+            
+            <div class="features">
+                <h2>Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-dumbbell feature-icon"></i>
+                        <h3>Exercise Tracking</h3>
+                        <p>Log your workouts and track calories burned</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-utensils feature-icon"></i>
+                        <h3>Nutrition Monitoring</h3>
+                        <p>Track your meals and macronutrients</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-bullseye feature-icon"></i>
+                        <h3>Goal Setting</h3>
+                        <p>Set and achieve your fitness goals</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <i class="fas fa-chart-line feature-icon"></i>
+                        <h3>Progress Tracking</h3>
+                        <p>Visualize your fitness journey</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    <% } %>
+</main>
+
+<%- include('partials/footer') %>

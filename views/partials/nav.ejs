@@ -1,0 +1,59 @@
+<nav class="navbar">
+    <div class="nav-brand">
+        <a href="<%= basePath %>/">
+            <i class="fas fa-heartbeat"></i>
+            FitLife Tracker
+        </a>
+    </div>
+    
+    <button class="nav-toggle" id="navToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+    
+    <ul class="nav-menu" id="navMenu">
+        <li><a href="<%= basePath %>/" class="nav-link">
+            <i class="fas fa-home"></i> Home
+        </a></li>
+        
+        <li><a href="<%= basePath %>/about" class="nav-link">
+            <i class="fas fa-info-circle"></i> About
+        </a></li>
+        
+        <% if (user) { %>
+            <li><a href="<%= basePath %>/exercises" class="nav-link">
+                <i class="fas fa-dumbbell"></i> Exercises
+            </a></li>
+            
+            <li><a href="<%= basePath %>/nutrition" class="nav-link">
+                <i class="fas fa-utensils"></i> Nutrition
+            </a></li>
+            
+            <li><a href="<%= basePath %>/goals" class="nav-link">
+                <i class="fas fa-bullseye"></i> Goals
+            </a></li>
+            
+            <li><a href="<%= basePath %>/search" class="nav-link">
+                <i class="fas fa-search"></i> Search
+            </a></li>
+            
+            <li class="nav-user">
+                <span class="user-greeting">
+                    <i class="fas fa-user"></i> 
+                    Hello, <%= user.first_name || user.username %>
+                </span>
+            </li>
+            
+            <li><a href="<%= basePath %>/auth/logout" class="nav-link btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a></li>
+        <% } else { %>
+            <li><a href="<%= basePath %>/auth/login" class="nav-link btn-login">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </a></li>
+            
+            <li><a href="<%= basePath %>/auth/register" class="nav-link btn-register">
+                <i class="fas fa-user-plus"></i> Register
+            </a></li>
+        <% } %>
+    </ul>
+</nav>

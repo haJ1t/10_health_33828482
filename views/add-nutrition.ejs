@@ -1,0 +1,159 @@
+<%- include('partials/header') %>
+<%- include('partials/nav') %>
+
+<main class="main-content">
+    <section class="form-section">
+        <div class="page-header">
+            <h1><i class="fas fa-plus-circle"></i> Add Meal</h1>
+            <p>Log your nutrition intake</p>
+        </div>
+        
+        <% if (errors && errors.length > 0) { %>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <ul class="error-list">
+                    <% errors.forEach(error => { %>
+                        <li><%= error.msg %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        <% } %>
+        
+        <div class="form-container">
+            <form action="<%= basePath %>/nutrition/add" method="POST" class="data-form">
+                <div class="form-group">
+                    <label for="meal_name">
+                        <i class="fas fa-utensils"></i> Meal Name *
+                    </label>
+                    <input 
+                        type="text" 
+                        id="meal_name" 
+                        name="meal_name" 
+                        class="form-control" 
+                        placeholder="e.g., Grilled Chicken Salad, Protein Smoothie"
+                        value="<%= formData.meal_name || '' %>"
+                        required
+                        autofocus
+                    >
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="meal_type">
+                            <i class="fas fa-list"></i> Meal Type *
+                        </label>
+                        <select 
+                            id="meal_type" 
+                            name="meal_type" 
+                            class="form-control"
+                            required
+                        >
+                            <option value="">Select type...</option>
+                            <option value="breakfast" <%= formData.meal_type === 'breakfast' ? 'selected' : '' %>>Breakfast</option>
+                            <option value="lunch" <%= formData.meal_type === 'lunch' ? 'selected' : '' %>>Lunch</option>
+                            <option value="dinner" <%= formData.meal_type === 'dinner' ? 'selected' : '' %>>Dinner</option>
+                            <option value="snack" <%= formData.meal_type === 'snack' ? 'selected' : '' %>>Snack</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="date">
+                            <i class="fas fa-calendar"></i> Date *
+                        </label>
+                        <input 
+                            type="date" 
+                            id="date" 
+                            name="date" 
+                            class="form-control"
+                            value="<%= formData.date || new Date().toISOString().split('T')[0] %>"
+                            max="<%= new Date().toISOString().split('T')[0] %>"
+                            required
+                        >
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="calories">
+                        <i class="fas fa-fire"></i> Calories *
+                    </label>
+                    <input 
+                        type="number" 
+                        id="calories" 
+                        name="calories" 
+                        class="form-control"
+                        placeholder="350"
+                        value="<%= formData.calories || '' %>"
+                        min="0"
+                        max="10000"
+                        required
+                    >
+                </div>
+                
+                <div class="macros-section">
+                    <h3>Macronutrients (Optional)</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="protein_grams">
+                                <i class="fas fa-drumstick-bite"></i> Protein (g)
+                            </label>
+                            <input 
+                                type="number" 
+                                id="protein_grams" 
+                                name="protein_grams" 
+                                class="form-control"
+                                placeholder="25.5"
+                                value="<%= formData.protein_grams || '' %>"
+                                min="0"
+                                step="0.1"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="carbs_grams">
+                                <i class="fas fa-bread-slice"></i> Carbs (g)
+                            </label>
+                            <input 
+                                type="number" 
+                                id="carbs_grams" 
+                                name="carbs_grams" 
+                                class="form-control"
+                                placeholder="45.0"
+                                value="<%= formData.carbs_grams || '' %>"
+                                min="0"
+                                step="0.1"
+                            >
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="fat_grams">
+                                <i class="fas fa-cheese"></i> Fat (g)
+                            </label>
+                            <input 
+                                type="number" 
+                                id="fat_grams" 
+                                name="fat_grams" 
+                                class="form-control"
+                                placeholder="12.5"
+                                value="<%= formData.fat_grams || '' %>"
+                                min="0"
+                                step="0.1"
+                            >
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Meal
+                    </button>
+                    <a href="<%= basePath %>/nutrition" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

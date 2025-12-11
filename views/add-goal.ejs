@@ -1,0 +1,138 @@
+<%- include('partials/header') %>
+<%- include('partials/nav') %>
+
+<main class="main-content">
+    <section class="form-section">
+        <div class="page-header">
+            <h1><i class="fas fa-plus-circle"></i> Add Goal</h1>
+            <p>Set a new fitness goal</p>
+        </div>
+        
+        <% if (errors && errors.length > 0) { %>
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <ul class="error-list">
+                    <% errors.forEach(error => { %>
+                        <li><%= error.msg %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        <% } %>
+        
+        <div class="form-container">
+            <form action="<%= basePath %>/goals/add" method="POST" class="data-form">
+                <div class="form-group">
+                    <label for="goal_type">
+                        <i class="fas fa-list"></i> Goal Type *
+                    </label>
+                    <select 
+                        id="goal_type" 
+                        name="goal_type" 
+                        class="form-control"
+                        required
+                    >
+                        <option value="">Select type...</option>
+                        <option value="weight_loss" <%= formData.goal_type === 'weight_loss' ? 'selected' : '' %>>Weight Loss</option>
+                        <option value="muscle_gain" <%= formData.goal_type === 'muscle_gain' ? 'selected' : '' %>>Muscle Gain</option>
+                        <option value="endurance" <%= formData.goal_type === 'endurance' ? 'selected' : '' %>>Endurance</option>
+                        <option value="flexibility" <%= formData.goal_type === 'flexibility' ? 'selected' : '' %>>Flexibility</option>
+                        <option value="general_fitness" <%= formData.goal_type === 'general_fitness' ? 'selected' : '' %>>General Fitness</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="goal_description">
+                        <i class="fas fa-align-left"></i> Goal Description *
+                    </label>
+                    <textarea 
+                        id="goal_description" 
+                        name="goal_description" 
+                        class="form-control"
+                        rows="3"
+                        placeholder="e.g., Lose 10kg by summer, Run 10km without stopping"
+                        maxlength="500"
+                        required
+                    ><%= formData.goal_description || '' %></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="current_value">
+                            <i class="fas fa-chart-line"></i> Current Value
+                        </label>
+                        <input 
+                            type="number" 
+                            id="current_value" 
+                            name="current_value" 
+                            class="form-control"
+                            placeholder="85"
+                            value="<%= formData.current_value || '' %>"
+                            step="0.1"
+                            min="0"
+                        >
+                        <small class="form-text">Optional</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="target_value">
+                            <i class="fas fa-bullseye"></i> Target Value
+                        </label>
+                        <input 
+                            type="number" 
+                            id="target_value" 
+                            name="target_value" 
+                            class="form-control"
+                            placeholder="75"
+                            value="<%= formData.target_value || '' %>"
+                            step="0.1"
+                            min="0"
+                        >
+                        <small class="form-text">Optional</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="unit">
+                            <i class="fas fa-ruler"></i> Unit
+                        </label>
+                        <input 
+                            type="text" 
+                            id="unit" 
+                            name="unit" 
+                            class="form-control"
+                            placeholder="kg, km, reps, etc."
+                            value="<%= formData.unit || '' %>"
+                            maxlength="20"
+                        >
+                        <small class="form-text">Optional</small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="target_date">
+                        <i class="fas fa-calendar"></i> Target Date
+                    </label>
+                    <input 
+                        type="date" 
+                        id="target_date" 
+                        name="target_date" 
+                        class="form-control"
+                        value="<%= formData.target_date || '' %>"
+                        min="<%= new Date().toISOString().split('T')[0] %>"
+                    >
+                    <small class="form-text">Optional</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Goal
+                    </button>
+                    <a href="<%= basePath %>/goals" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

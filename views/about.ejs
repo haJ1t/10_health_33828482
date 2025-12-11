@@ -1,0 +1,96 @@
+<%- include('partials/header') %>
+<%- include('partials/nav') %>
+
+<main class="main-content">
+    <section class="about-section">
+        <h1>About FitLife Tracker</h1>
+        
+        <div class="about-content">
+            <div class="about-intro">
+                <p>
+                    FitLife Tracker is a comprehensive health and fitness tracking application 
+                    designed to help you monitor your exercise routines, nutrition intake, 
+                    and fitness goals all in one place.
+                </p>
+            </div>
+            
+            <div class="about-features">
+                <h2>Key Features</h2>
+                <ul class="feature-list">
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Exercise Tracking:</strong> Log various types of exercises including cardio, strength training, flexibility, and sports activities.
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Nutrition Monitoring:</strong> Track your daily meals with detailed macronutrient information (calories, protein, carbs, and fats).
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Goal Management:</strong> Set personalized fitness goals and track your progress towards achieving them.
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Advanced Search:</strong> Quickly find your exercises and meals using our powerful search functionality.
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Data Visualization:</strong> View your progress through interactive charts and statistics.
+                    </li>
+                    <li>
+                        <i class="fas fa-check-circle"></i>
+                        <strong>Secure Authentication:</strong> Your data is protected with industry-standard security measures.
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="about-tech">
+                <h2>Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <i class="fab fa-node-js"></i>
+                        <p>Node.js & Express</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-database"></i>
+                        <p>MySQL Database</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-code"></i>
+                        <p>EJS Templates</p>
+                    </div>
+                    <div class="tech-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Bcrypt Security</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-mission">
+                <h2>Our Mission</h2>
+                <p>
+                    We believe that tracking your fitness journey should be simple, intuitive, 
+                    and motivating. FitLife Tracker was built to empower individuals to take 
+                    control of their health and achieve their fitness goals through consistent 
+                    monitoring and data-driven insights.
+                </p>
+            </div>
+            
+            <div class="about-cta">
+                <% if (!user) { %>
+                    <p>Ready to start your fitness journey?</p>
+                    <a href="<%= basePath %>/auth/register" class="btn btn-primary btn-large">
+                        <i class="fas fa-user-plus"></i> Join Now
+                    </a>
+                <% } else { %>
+                    <p>Continue your fitness journey!</p>
+                    <a href="<%= basePath %>/" class="btn btn-primary btn-large">
+                        <i class="fas fa-home"></i> Go to Dashboard
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,27 @@
+{
+  "name": "fitlife-tracker",
+  "version": "1.0.0",
+  "description": "Health and fitness tracking application",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": ["health", "fitness", "express", "mysql"],
+  "author": "Your Name",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "ejs": "^3.1.9",
+    "mysql": "^2.18.1",
+    "express-session": "^1.17.3",
+    "bcrypt": "^5.1.1",
+    "express-validator": "^7.0.1",
+    "express-sanitizer": "^1.0.6",
+    "dotenv": "^16.3.1",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

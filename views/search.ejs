@@ -1,0 +1,98 @@
+<%- include('partials/header') %>
+<%- include('partials/nav') %>
+
+<main class="main-content">
+    <section class="search-section">
+        <div class="page-header">
+            <h1><i class="fas fa-search"></i> Search</h1>
+            <p>Search through your exercises and nutrition entries</p>
+        </div>
+        
+        <div class="search-container">
+            <form action="<%= basePath %>/search-result" method="GET" class="search-form">
+                <div class="form-group">
+                    <label for="keyword">
+                        <i class="fas fa-keyboard"></i> Search Keyword
+                    </label>
+                    <input 
+                        type="text" 
+                        id="keyword" 
+                        name="keyword" 
+                        class="form-control" 
+                        placeholder="Enter exercise or meal name..."
+                        value="<%= keyword || '' %>"
+                        required
+                        autofocus
+                    >
+                </div>
+                
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Search
+                </button>
+            </form>
+            
+            <!-- AJAX Live Search (Advanced Feature) -->
+            <div class="live-search-container">
+                <h3>Quick Search</h3>
+                <input 
+                    type="text" 
+                    id="liveSearch" 
+                    class="form-control" 
+                    placeholder="Type to search instantly..."
+                >
+                <div id="liveSearchResults" class="live-search-results"></div>
+            </div>
+        </div>
+        
+        <% if (results !== null) { %>
+            <div class="search-results">
+                <h2>Search Results for "<%= keyword %>"</h2>
+                
+                <% if (message) { %>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i>
+                        <%= message %>
+                    </div>
+                <% } %>
+                
+                <% if (results && results.length > 0) { %>
+                    <div class="results-count">
+                        Found <%= results.length %> result<%= results.length !== 1 ? 's' : '' %>
+                    </div>
+                    
+                    <div class="results-list">
+                        <% results.forEach(result => { %>
+                            <div class="result-item">
+                                <div class="result-icon">
+                                    <% if (result.type === 'exercise') { %>
+                                        <i class="fas fa-dumbbell"></i>
+                                    <% } else { %>
+                                        <i class="fas fa-utensils"></i>
+                                    <% } %>
+                                </div>
+                                <div class="result-details">
+                                    <h3><%= result.name %></h3>
+                                    <p class="result-meta">
+                                        <span class="result-type">
+                                            <%= result.type === 'exercise' ? 'Exercise' : 'Nutrition' %>
+                                        </span>
+                                        <span class="result-date">
+                                            <i class="fas fa-calendar"></i>
+                                            <%= new Date(result.date).toLocaleDateString() %>
+                                        </span>
+                                        <span class="result-calories">
+                                            <i class="fas fa-fire"></i>
+                                            <%= result.calories %> calories
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+    </section>
+</main>
+
+<%- include('partials/footer') %>

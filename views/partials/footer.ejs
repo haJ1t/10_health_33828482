@@ -1,0 +1,20 @@
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2024 FitLife Tracker. All rights reserved.</p>
+        <p>
+            <a href="<%= basePath %>/">Home</a> | 
+            <a href="<%= basePath %>/about">About</a> | 
+            <% if (user) { %>
+                <a href="<%= basePath %>/exercises">Exercises</a> | 
+                <a href="<%= basePath %>/nutrition">Nutrition</a> | 
+                <a href="<%= basePath %>/goals">Goals</a>
+            <% } %>
+        </p>
+    </div>
+</footer>
+</div>
+
+<!-- Main JavaScript -->
+<script src="<%= basePath %>/js/main.js"></script>
+</body>
+</html>
