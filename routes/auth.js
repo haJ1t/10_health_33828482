@@ -6,10 +6,15 @@ const { body, validationResult } = require('express-validator');
 // BASE PATH for Gold server
 const BASE = process.env.HEALTH_BASE_PATH || "";
 
+// SAFELY FIX DOUBLE-SLASH ISSUES ON GOLD SERVER
+function safe(path) {
+    return path.replace(/\/{2,}/g, '/'); // turns // into /
+}
+
 // Show login page
 router.get('/login', (req, res) => {
     if (req.session.user) {
-        return res.redirect(BASE + '/');
+        return res.redirect(safe(BASE + '/'));
     }
     res.render('login', {
         title: 'Login - FitLife Tracker',
@@ -70,14 +75,15 @@ router.post('/login', [
             last_name: user.last_name
         };
 
-        res.redirect(BASE + '/');
+        // FIX LOGIN REDIRECT (no 404, no //)
+        res.redirect(safe(BASE + '/'));
     });
 });
 
 // Show register page
 router.get('/register', (req, res) => {
     if (req.session.user) {
-        return res.redirect(BASE + '/');
+        return res.redirect(safe(BASE + '/'));
     }
     res.render('register', {
         title: 'Register - FitLife Tracker',
@@ -108,15 +114,11 @@ router.post('/register', [
     body('first_name')
         .trim()
         .notEmpty()
-        .withMessage('First name is required')
-        .isAlpha()
-        .withMessage('First name must contain only letters'),
+        .isAlpha(),
     body('last_name')
         .trim()
         .notEmpty()
-        .withMessage('Last name is required')
         .isAlpha()
-        .withMessage('Last name must contain only letters')
 ], async (req, res) => {
 
     const errors = validationResult(req);
@@ -174,7 +176,7 @@ router.post('/register', [
                 last_name: last_name
             };
 
-            res.redirect(BASE + '/');
+            res.redirect(safe(BASE + '/'));
         });
     });
 });
@@ -182,7 +184,7 @@ router.post('/register', [
 // Logout
 router.get('/logout', (req, res) => {
     req.session.destroy(() => {
-        res.redirect(BASE + '/login');
+        res.redirect(safe(BASE + '/login'));
     });
 });
 
