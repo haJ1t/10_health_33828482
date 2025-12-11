@@ -3,10 +3,13 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const { body, validationResult } = require('express-validator');
 
+// BASE PATH for Gold server
+const BASE = process.env.HEALTH_BASE_PATH || "";
+
 // Show login page
 router.get('/login', (req, res) => {
     if (req.session.user) {
-        return res.redirect('/');
+        return res.redirect(BASE + '/');
     }
     res.render('login', {
         title: 'Login - FitLife Tracker',
@@ -14,25 +17,24 @@ router.get('/login', (req, res) => {
     });
 });
 
-// Handle login (Lab 8a)
+// Handle login
 router.post('/login', [
     body('username').trim().notEmpty().withMessage('Username is required'),
     body('password').notEmpty().withMessage('Password is required')
 ], (req, res) => {
     const errors = validationResult(req);
-    
+
     if (!errors.isEmpty()) {
         return res.render('login', {
             title: 'Login - FitLife Tracker',
             error: errors.array()[0].msg
         });
     }
-    
+
     const { username, password } = req.body;
-    
-    // Find user in database
+
     const query = 'SELECT * FROM users WHERE username = ?';
-    
+
     db.query(query, [username], async (err, results) => {
         if (err) {
             console.error(err);
@@ -41,26 +43,24 @@ router.post('/login', [
                 error: 'An error occurred. Please try again.'
             });
         }
-        
+
         if (results.length === 0) {
             return res.render('login', {
                 title: 'Login - FitLife Tracker',
                 error: 'Invalid username or password'
             });
         }
-        
+
         const user = results[0];
-        
-        // Compare password with hash (Lab 7)
         const match = await bcrypt.compare(password, user.hashedPassword);
-        
+
         if (!match) {
             return res.render('login', {
                 title: 'Login - FitLife Tracker',
                 error: 'Invalid username or password'
             });
         }
-        
+
         // Create session
         req.session.user = {
             id: user.id,
@@ -69,15 +69,15 @@ router.post('/login', [
             first_name: user.first_name,
             last_name: user.last_name
         };
-        
-        res.redirect('/');
+
+        res.redirect(BASE + '/');
     });
 });
 
 // Show register page
 router.get('/register', (req, res) => {
     if (req.session.user) {
-        return res.redirect('/');
+        return res.redirect(BASE + '/');
     }
     res.render('register', {
         title: 'Register - FitLife Tracker',
@@ -86,7 +86,7 @@ router.get('/register', (req, res) => {
     });
 });
 
-// Handle registration (Lab 7 + Lab 8b)
+// Handle registration
 router.post('/register', [
     body('username')
         .trim()
@@ -118,8 +118,9 @@ router.post('/register', [
         .isAlpha()
         .withMessage('Last name must contain only letters')
 ], async (req, res) => {
+
     const errors = validationResult(req);
-    
+
     if (!errors.isEmpty()) {
         return res.render('register', {
             title: 'Register - FitLife Tracker',
@@ -127,12 +128,11 @@ router.post('/register', [
             formData: req.body
         });
     }
-    
+
     const { username, email, password, first_name, last_name } = req.body;
-    
-    // Check if username or email already exists
+
     const checkQuery = 'SELECT * FROM users WHERE username = ? OR email = ?';
-    
+
     db.query(checkQuery, [username, email], async (err, results) => {
         if (err) {
             console.error(err);
@@ -142,7 +142,7 @@ router.post('/register', [
                 formData: req.body
             });
         }
-        
+
         if (results.length > 0) {
             return res.render('register', {
                 title: 'Register - FitLife Tracker',
@@ -150,14 +150,12 @@ router.post('/register', [
                 formData: req.body
             });
         }
-        
-        // Hash password (Lab 7)
+
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
-        
-        // Insert new user
+
         const insertQuery = 'INSERT INTO users (username, email, hashedPassword, first_name, last_name) VALUES (?, ?, ?, ?, ?)';
-        
+
         db.query(insertQuery, [username, email, hashedPassword, first_name, last_name], (err, result) => {
             if (err) {
                 console.error(err);
@@ -167,8 +165,7 @@ router.post('/register', [
                     formData: req.body
                 });
             }
-            
-            // Auto-login after registration
+
             req.session.user = {
                 id: result.insertId,
                 username: username,
@@ -176,19 +173,16 @@ router.post('/register', [
                 first_name: first_name,
                 last_name: last_name
             };
-            
-            res.redirect('/');
+
+            res.redirect(BASE + '/');
         });
     });
 });
 
 // Logout
 router.get('/logout', (req, res) => {
-    req.session.destroy((err) => {
-        if (err) {
-            console.error(err);
-        }
-        res.redirect('/');
+    req.session.destroy(() => {
+        res.redirect(BASE + '/login');
     });
 });
 

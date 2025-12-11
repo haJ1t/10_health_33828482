@@ -10,6 +10,9 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 8000;
 
+// Base path for Gold server
+const BASE = process.env.HEALTH_BASE_PATH || "";
+
 // Database connection
 const db = mysql.createConnection({
     host: process.env.HEALTH_HOST,
@@ -34,25 +37,27 @@ global.db = db;
 app.set('view engine', 'ejs');
 
 // Middleware
-app.use(express.urlencoded({ extended: true })); // Parse form data
-app.use(express.json()); // Parse JSON data (for AJAX)
-app.use(express.static('public')); // Serve static files
-app.use(expressSanitizer()); // Sanitize inputs
+app.use(express.urlencoded({ extended: true })); 
+app.use(express.json());
+app.use(expressSanitizer());
 
-// Session middleware (Lab 8a)
+// --- STATIC FILE FIX FOR GOLD SERVER ---
+app.use(BASE, express.static(__dirname + '/public'));
+
+// Session middleware
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24 // 24 hours
+        maxAge: 1000 * 60 * 60 * 24
     }
 }));
 
-// Make user session available in all views
+// Make user session & base path available in all views
 app.use((req, res, next) => {
     res.locals.user = req.session.user || null;
-    res.locals.basePath = process.env.HEALTH_BASE_PATH || '';
+    res.locals.basePath = BASE;
     next();
 });
 
@@ -64,13 +69,13 @@ const nutritionRoutes = require('./routes/nutrition');
 const goalRoutes = require('./routes/goals');
 const apiRoutes = require('./routes/api');
 
-// Use routes
-app.use('/', mainRoutes);
-app.use('/auth', authRoutes);
-app.use('/exercises', exerciseRoutes);
-app.use('/nutrition', nutritionRoutes);
-app.use('/goals', goalRoutes);
-app.use('/api', apiRoutes);
+// --- APPLY BASE PATH TO ALL ROUTES ---
+app.use(BASE + '/', mainRoutes);
+app.use(BASE + '/auth', authRoutes);
+app.use(BASE + '/exercises', exerciseRoutes);
+app.use(BASE + '/nutrition', nutritionRoutes);
+app.use(BASE + '/goals', goalRoutes);
+app.use(BASE + '/api', apiRoutes);
 
 // 404 Error handler
 app.use((req, res) => {
@@ -80,7 +85,7 @@ app.use((req, res) => {
     });
 });
 
-// Global error handler (Advanced feature)
+// Global error handler
 app.use((err, req, res, next) => {
     console.error('Error:', err.stack);
     res.status(500).render('error', {
@@ -92,6 +97,6 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(port, () => {
-    console.log(`🚀 FitLife Tracker running on ${process.env.HEALTH_BASE_PATH}`);
+    console.log(`🚀 FitLife running at BASE PATH: ${BASE}`);
     console.log(`📊 Server started at: ${new Date().toLocaleString()}`);
 });
